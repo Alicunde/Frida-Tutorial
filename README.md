@@ -134,7 +134,8 @@ Java.perform(function() {
 
       },
     });
-});```
+});
+```
 
 
 La variable más importante del filtrado de funciones sobre Javascript es la variable **inspector**, que permite localizar por nombre la clase deseada.
@@ -165,7 +166,8 @@ function traceClass(targetClass) {
     if ('call' === targetMethod) traceMethod(targetClass + '.' + targetMethod);
   });
 
-}```
+}
+```
 
 
 ## 12. Conexión a los métodos

@@ -70,24 +70,28 @@ js = file.read()
 
 Una forma de facilitar la comunicación entre Javascript y Python es reescribir partes del propio Javascript mediante Python con líneas del tipo:
 
-```
-Java.perform(Main("test","my.class.to.interceptor"));```
+`
+Java.perform(Main("test","my.class.to.interceptor"));`
 
 
 ## 6. Validación de Emuladores a Interceptar
 
 Este procedimiento permite al programador validar el número de emuladores disponibles para ser interceptados. Generalmente solemos tener múltiples dispositivos conectados, por lo que filtrarlos correctamente facilita la automatización del proceso.
 
-´devices = frida.get_device_manager().enumerate_devices()´
+```
+devices = frida.get_device_manager().enumerate_devices()```
+
 
 Esta función de Frida retorna todos los emuladores y dispositivos disponibles. Personalmente realizo un filtrado simplificado tal que así:
 
-`i = 0
+```
+i = 0
 while(i<len(devices)):
     name = str(devices[i])
     if(name.find('Android')):
         device = devices[i]
-    i = i + 1`
+    i = i + 1```
+
 
 ## 7. Tiempo de Estabilización
 En este punto, añado un sleep general a todo el proceso (generalmente 50 segundos) esperando tener disponible todo el procesor de la máquina y no iniciar la interceptación con procesos secundarios que aumentarán los delays de la ejecución y generando bloqueos aleatorios sobre Android. Cabe recordar que los tiempos de ejecución no pueden verse afectados por la interceptación de Frida, ya que en la mayor parte de los casos, generarán bloqueos y errores por doquier en la aplicación analizada.
@@ -101,10 +105,12 @@ Para anidar la interceptación de Frida sobre una aplicación se hace uso del si
 
 El lanzamiento de nuestro script en Javascript debe realizarse una vez la aplicación a analizar está operativa.
 
-`script = session.create_script(js)
+```
+script = session.create_script(js)
 script.on('message', onMessage)
 script.load()
-sys.stdin.read()`
+sys.stdin.read()```
+
 
 En el código anterior, apreciamos una función llamada **onMessage** de Python, que será ejecutado en el lado de Javascript con los parámetros deseados. Este comportamiento permite el trabajar con comonidad sobre el hilo de Python y realizar procesos independientes al hilo de Javascript. Algo fundamental para no saturar el hilo principal de la aplicación analizada.
 

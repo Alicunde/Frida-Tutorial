@@ -154,7 +154,8 @@ Una clase puede tener múltitud de métodos, mediante esta función somos capace
 ## 12. Conexión a los métodos
 Mediante la siguiente función interceptamos el método y compilamos todos los parámetros. Una vez compilados son almacenados en un objeto que será enviado a la función onMessage de Python.
 
-`function traceMethod(targetClassMethod) {
+`
+function traceMethod(targetClassMethod) {
   var delim = targetClassMethod.lastIndexOf('.');
   if (delim === -1) return;
 

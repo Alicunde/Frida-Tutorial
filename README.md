@@ -21,6 +21,11 @@ Para la apertura del emulador de Android Studio vamos a utilizar "subprocess" de
 
 `subprocess.Popen(["export ANDROID_SDK=$HOME/Library/Android/sdk && export PATH=$ANDROID_SDK/emulator:$ANDROID_SDK/tools:$PATH && emulator @Pixel_3a_API_30_x86"],shell=True)`
 
+El string identificativo del emulador puede encontrarse dentro del gestor de emuladores del propio Android Studio.
+
+![Android Virtual Device Manager](images/manager.png)
+
+
 time.sleep(70)
 
 

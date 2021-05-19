@@ -53,22 +53,26 @@ Lo único relevante de este comando es definir el mismo path del emulador donde 
 ## 4. Ejecución de Frida
 Este paso simplemente ejecuta el servidor Frida dentro del propio emulador mediante ADB.
 
-`command = 'adb shell "su 0 /data/local/tmp/server"'
+```
+command = 'adb shell "su 0 /data/local/tmp/server"'
 print(command)
 proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-`
+```
 
 ## 5. Almacenamiento del código del Interceptor
 Una de las soluciones más cómodas es la de crear un archivo externo en Javascript, para ser posteriormente introducirlo por Frida en el momento de interceptar las clases deseadas.
 
-`path = '/Users/my-computer/Desktop/interceptor.js'
+```
+path = '/Users/my-computer/Desktop/interceptor.js'
 file = open(path, 'r')
 js = file.read()
-`
+```
 
 Una forma de facilitar la comunicación entre Javascript y Python es reescribir partes del propio Javascript mediante Python con líneas del tipo:
 
-´Java.perform(Main("test","my.class.to.interceptor"));´
+```
+Java.perform(Main("test","my.class.to.interceptor"));```
+
 
 ## 6. Validación de Emuladores a Interceptar
 
@@ -107,7 +111,8 @@ En el código anterior, apreciamos una función llamada **onMessage** de Python,
 ## 10. Filtrado de Clases
 El filtrado de clases es la tarea más tediosa del análisis de una aplicación. Inicialmente resulta fascinante consultar todas las clases de una aplicación, pero generalmente el volumen de clases resulta demasiado grande para su análisis conjunto, por lo que requiere particionarlo. 
 
-`Java.perform(function() {
+```
+Java.perform(function() {
   Java.enumerateLoadedClasses({
       onMatch: function (className) {
         if (className.includes(inspector)) {
@@ -120,14 +125,16 @@ El filtrado de clases es la tarea más tediosa del análisis de una aplicación.
 
       },
     });
-});`
+});```
+
 
 La variable más importante del filtrado de funciones sobre Javascript es la variable **inspector**, que permite localizar por nombre la clase deseada.
 
 ## 11. Detección de los métodos
 Una clase puede tener múltitud de métodos, mediante esta función somos capaces de volver a filtrarlos y conectarlos a todos los deseados.
 
-`function traceClass(targetClass) {
+```
+function traceClass(targetClass) {
   var hook;
   try {
     hook = Java.use(targetClass);
@@ -149,12 +156,13 @@ Una clase puede tener múltitud de métodos, mediante esta función somos capace
     if ('call' === targetMethod) traceMethod(targetClass + '.' + targetMethod);
   });
 
-}`
+}```
+
 
 ## 12. Conexión a los métodos
 Mediante la siguiente función interceptamos el método y compilamos todos los parámetros. Una vez compilados son almacenados en un objeto que será enviado a la función onMessage de Python.
 
-`
+```
 function traceMethod(targetClassMethod) {
   var delim = targetClassMethod.lastIndexOf('.');
   if (delim === -1) return;
@@ -204,4 +212,4 @@ function traceMethod(targetClassMethod) {
     };
   }
 }
-`
+```
